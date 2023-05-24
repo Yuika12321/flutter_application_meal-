@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'neis_api.dart';
+import 'package:flutter_application_meal/neis_api.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +16,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: MainPage(),
     );
   }
@@ -31,29 +32,29 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  dynamic mealList = const Text('검색하세용');
+  dynamic mealList = const Text('검색하세요');
 
-  showCal() async {
+  void showCal() async {
     var dt = await showDateRangePicker(
         context: context,
         firstDate: DateTime(2023, 3, 2),
         lastDate: DateTime(2023, 12, 30));
+    print(dt.toString());
     String fromDate = dt.toString().split(' ')[0].replaceAll('-', '');
     String toDate = dt.toString().split(' ')[3].replaceAll('-', '');
     var neisApi = NeisApi();
-    var meals = await neisApi.getMeal(fromDate: fromDate, toDate: toDate);
-
+    var meals = await NeisApi().getMeal(fromDate: fromDate, toDate: toDate);
     setState(() {
       mealList = ListView.separated(
           itemBuilder: (context, index) {
             return ListTile(
               title: Text(meals[index]['MLSV_YMD']),
-              subtitle: Text(meals[index]['DDISHI_NM']
+              subtitle: Text(meals[index]['DDISH_NM']
                   .toString()
                   .replaceAll('<br/>', '\n')),
             );
           },
-          separatorBuilder: (context, index) => const Divider(), // 구분자 나눠주는 모습
+          separatorBuilder: (context, index) => const Divider(),
           itemCount: meals.length);
     });
   }
@@ -63,7 +64,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Column(
         children: [
-          const Text('20230101'),
+          const Text(''),
           Expanded(child: mealList),
         ],
       ),
