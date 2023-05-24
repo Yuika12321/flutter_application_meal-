@@ -32,18 +32,18 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  dynamic mealList = const Text('검색하세요');
+  dynamic mealList = const Text('검색하세용');
 
   void showCal() async {
     var dt = await showDateRangePicker(
         context: context,
         firstDate: DateTime(2023, 3, 2),
         lastDate: DateTime(2023, 12, 30));
-    print(dt.toString());
     String fromDate = dt.toString().split(' ')[0].replaceAll('-', '');
     String toDate = dt.toString().split(' ')[3].replaceAll('-', '');
     var neisApi = NeisApi();
-    var meals = await NeisApi().getMeal(fromDate: fromDate, toDate: toDate);
+    var meals = await neisApi.getMeal(fromDate: fromDate, toDate: toDate);
+
     setState(() {
       mealList = ListView.separated(
           itemBuilder: (context, index) {
@@ -54,7 +54,7 @@ class _MainPageState extends State<MainPage> {
                   .replaceAll('<br/>', '\n')),
             );
           },
-          separatorBuilder: (context, index) => const Divider(),
+          separatorBuilder: (context, index) => const Divider(), // 구분자 나눠주는 모습
           itemCount: meals.length);
     });
   }
@@ -64,7 +64,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Column(
         children: [
-          const Text(''),
+          const Text('20230101'),
           Expanded(child: mealList),
         ],
       ),
